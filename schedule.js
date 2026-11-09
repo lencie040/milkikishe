@@ -1,0 +1,8 @@
+export const stations=[{name:'汽界',en:'STEAM WORLD',color:0x83cdda},{name:'綿界',en:'COTTON WORLD',color:0xcab0f1},{name:'菓界',en:'CANDY WORLD',color:0xf5a9c8},{name:'妖星',en:'FAE STAR',color:0x85e0c2}];
+export const CYCLE=1800;
+// JST midnight is the reference; every cycle is exactly 30 minutes.
+export const segments=[{from:0,to:1,start:0,end:210},{from:1,to:1,start:210,end:255},{from:1,to:2,start:255,end:495},{from:2,to:2,start:495,end:540},{from:2,to:3,start:540,end:810},{from:3,to:3,start:810,end:900},{from:3,to:2,start:900,end:1170},{from:2,to:2,start:1170,end:1215},{from:2,to:1,start:1215,end:1455},{from:1,to:1,start:1455,end:1500},{from:1,to:0,start:1500,end:1710},{from:0,to:0,start:1710,end:1800}];
+export function stateAt(ms=Date.now()){const seconds=ms/1000;const cycleStart=Math.floor(seconds/CYCLE)*CYCLE;const phase=seconds-cycleStart;const segment=segments.find(s=>phase>=s.start&&phase<s.end);const moving=segment.from!==segment.to;const progress=(phase-segment.start)/(segment.end-segment.start);const down=phase<900;const trip=Math.floor((seconds+32400)%86400/900)+1;const count=14+(Math.floor(cycleStart/CYCLE)+segment.from*3+(down?0:5))%9;return{...segment,phase,cycleStart,progress,moving,down,trip,count,remaining:Math.ceil(segment.end-phase),speed:moving?12*Math.sin(Math.PI*progress)**0.28:0,position:segment.from+(segment.to-segment.from)*progress};}
+export function timeAt(seconds,withSeconds=false){return new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit',...(withSeconds?{second:'2-digit'}:{}),hourCycle:'h23'}).format(new Date(seconds*1000));}
+export const downTimes=[0,210,495,810];
+export const upTimes=[1710,1455,1170,900];
