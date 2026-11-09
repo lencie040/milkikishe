@@ -1,5 +1,5 @@
 import {stations,stateAt,timeAt,downTimes,upTimes,CYCLE,segments} from './schedule.js';
-import {createScene} from './scene.js';
+import {createScene} from './scene.js?v=2';
 const $=id=>document.getElementById(id);let scene;try{scene=createScene($('universe'));}catch(error){$('fallback').hidden=false;console.error(error);}
 let scheduleDirection='down',lastTable='';
 const setView=v=>{document.querySelectorAll('[data-view]').forEach(b=>{b.classList.toggle('selected',b.dataset.view===v);b.setAttribute('aria-pressed',b.dataset.view===v);});scene?.setView(v);};document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));
